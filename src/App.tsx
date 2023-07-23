@@ -1,7 +1,8 @@
 import React from 'react';
 import Layout from "./UI/Layout/Layout";
 import {Route, Routes} from "react-router-dom";
-import Home from "./conatiners/Home/Home";
+import Home from "./containers/Home/Home";
+import AddContact from "./containers/AddContacts/AddContacts";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
                    <Home/>
                )}/>
 
-               {/*<Route path="/new-dish" element={(<NewContact />)}/>*/}
+               <Route path="/new-contact" element={(<AddContact />)}/>
            </Routes>
        </Layout>
     </>
