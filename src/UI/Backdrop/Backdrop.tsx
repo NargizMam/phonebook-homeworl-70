@@ -1,16 +1,20 @@
 import React from 'react';
+import {useAppDispatch, useAppSelector} from "../../app/hook";
+import {openModal, selectIsShowModal} from "../../store/ContactsSlice";
 
-interface Props {
-  show: boolean;
-  onClick?: React.MouseEventHandler;
-}
 
-const Backdrop: React.FC<Props> = ({show, onClick}) => {
+
+const Backdrop: React.FC= () => {
+    const dispatch = useAppDispatch();
+    const isShow = useAppSelector(selectIsShowModal);
+    const close = () => {
+        dispatch(openModal(false));
+    }
   return (
       <div
           className="modal-backdrop show"
-          style={{display: show ? 'block': 'none'}}
-          onClick={onClick}
+          style={{display: isShow ? 'block': 'none'}}
+          onClick={close}
       />
   );
 };

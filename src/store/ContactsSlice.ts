@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ApiContact, ApiOneContact} from "../types";
 import {RootState} from "../app/store";
 import {createContact, deleteContact, fetchAllContacts, fetchOneContact, updateContact} from "./ContactsThunks";
@@ -11,6 +11,7 @@ interface ContactsState {
     fetchOneLoading: boolean,
     deleteLoading: boolean,
     oneContact: null | ApiOneContact,
+    isShowModal: boolean;
 }
 
 const initialState: ContactsState = {
@@ -20,13 +21,18 @@ const initialState: ContactsState = {
     updateLoading: false,
     fetchOneLoading: false,
     deleteLoading: false,
-    oneContact: null
+    oneContact: null,
+    isShowModal: false,
 }
 
 export const ContactsSlice  = createSlice({
     name: 'allContacts',
     initialState,
-    reducers: {},
+    reducers: {
+        openModal:(state, {payload: isShow}:PayloadAction<boolean>) => {
+            state.isShowModal = isShow;
+        }
+    },
     extraReducers:(builder) =>  {
         builder.addCase(fetchAllContacts.pending, (state) => {
             state.fetchLoading = true;
@@ -79,6 +85,7 @@ export const ContactsSlice  = createSlice({
     }
 });
 export const contactsReducer = ContactsSlice.reducer;
+export const {openModal} = ContactsSlice.actions;
 export const selectAllContacts = (state: RootState) => state.contacts.allContacts;
 export const selectFetchLoading = (state: RootState) => state.contacts.fetchLoading;
 export const selectCreateLoading = (state: RootState) => state.contacts.createLoading;
@@ -86,3 +93,4 @@ export const selectUpdateLoading = (state: RootState) => state.contacts.updateLo
 export const selectOneFetchLoading = (state: RootState) => state.contacts.fetchOneLoading;
 export const selectOneContact = (state: RootState) => state.contacts.oneContact;
 export const selectDeleteLoading = (state: RootState) => state.contacts.deleteLoading;
+export const selectIsShowModal = (state: RootState) => state.contacts.isShowModal;

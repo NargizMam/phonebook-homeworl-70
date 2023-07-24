@@ -1,56 +1,61 @@
 import * as React from 'react';
 import {ApiOneContact} from "../../types";
-import Modal from '@mui/material/Modal';
 import {useNavigate} from "react-router-dom";
 import ButtonSpinner from "../../UI/Spinner/ButtonSpinner";
+import ContactModal from "../../UI/ContactModal/ContactModal";
+import {Button, CardActions, CardContent} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import {useAppDispatch} from "../../app/hook";
+import {openModal} from "../../store/ContactsSlice";
 
 interface Props {
-    showModal: boolean,
-    closeModal: React.MouseEventHandler,
     contact: ApiOneContact,
     onDelete: React.MouseEventHandler
     loading: boolean
 }
 
-const  ContactInfo: React.FC<Props> = ({showModal, closeModal, contact, onDelete, loading}) => {
+const  ContactInfo: React.FC<Props> = ({contact, onDelete, loading}) => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    return  (
-        <Modal open={showModal}>
-            <div className="modal-body bg-secondary p-3" style={{width: 400,margin: 150, color: "white"}}>
-                <button type="button" className="btn-close position-absolute top-0 end-0"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                        onClick={closeModal}
-                ></button>
 
-                <img src={contact.photo}
-                     className="card-img-top"
-                     alt={contact.name}
-                     style={{maxHeight: 350 }}
-                />
-                <div className="card-body">
-                    <h3 className="card-title">{contact.name}</h3>
-                    <p className="card-text">{contact.phone}</p>
-                    <p className="card-text">{contact.email}</p>
-                </div>
-                <div className="modal-footer d-flex justify-content-between mx-5" >
-                    <button
-                        className="btn btn-danger"
-                        onClick={()=> {navigate('/edit/:' + contact.id)}}
-                    >
-                        Edit
-                    </button>
-                    <button
-                        className="btn btn-primary"
-                        onClick={onDelete}
-                    >
-                        {loading && <ButtonSpinner/>}
-                        Delete
-                    </button>
-                </div>
-            </div>
-        </Modal>
+    return  (
+        <ContactModal title={contact.name}>
+            <img src={contact.photo}
+                 className="card-img-top"
+                 alt={contact.name}
+                 style={{maxHeight: 200 }}
+            />
+            <button type="button" className="btn-close "
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    onClick={()=> dispatch(openModal(false))}
+            >X</button>
+            <CardContent>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    {contact.phone}
+                </Typography>
+                <Typography color="text.secondary">
+                    {contact.email}
+                </Typography>
+
+            </CardContent>
+            <CardActions>
+                <Button
+                    className="btn btn-danger"
+                    onClick={()=> {navigate('/edit/:' + contact.id)}}
+                >
+                    Edit
+                </Button>
+                <Button
+                    className="btn btn-primary"
+                    onClick={onDelete}
+                >
+                    {loading && <ButtonSpinner/>}
+                    Delete
+                </Button>
+            </CardActions>
+        </ContactModal>
     )
 };
 

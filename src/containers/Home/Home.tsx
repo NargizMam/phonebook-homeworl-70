@@ -1,7 +1,13 @@
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
-import {selectAllContacts, selectDeleteLoading, selectFetchLoading, selectOneContact} from "../../store/ContactsSlice";
-import {useEffect, useState} from "react";
+import {
+    openModal,
+    selectAllContacts,
+    selectDeleteLoading,
+    selectFetchLoading,
+    selectOneContact
+} from "../../store/ContactsSlice";
+import {useEffect} from "react";
 import {deleteContact, fetchAllContacts, fetchOneContact} from "../../store/ContactsThunks";
 import OneContact from "../../components/OneContact/OneContact";
 import {Container} from "@mui/material";
@@ -15,7 +21,7 @@ const PhoneBook = () => {
     const fetchLoading = useAppSelector(selectFetchLoading);
     const oneContactInfo = useAppSelector(selectOneContact);
     const deleteLoading = useAppSelector(selectDeleteLoading);
-    const [showModal, setShowModal] = useState(false);
+
     let contactsList;
 
     useEffect(() => {
@@ -25,10 +31,7 @@ const PhoneBook = () => {
 
     const openContactInfo = async (id: string) => {
         await dispatch(fetchOneContact(id));
-        setShowModal(true);
-    };
-    const closeModal = () => {
-        setShowModal(false);
+        dispatch(openModal(true));
     };
     contactsList = (
         allContacts.map(contact => (
@@ -44,7 +47,7 @@ const PhoneBook = () => {
     const onDeleteContact =async (id: string) => {
         await  dispatch(deleteContact(id));
         navigate('/');
-        setShowModal(false);
+        dispatch(openModal(false));
         dispatch(fetchAllContacts());
     }
 
@@ -55,8 +58,7 @@ const PhoneBook = () => {
             {contactsList}
             {oneContactInfo &&
                 <div style={{textAlign: 'center'}}>
-                    <ContactInfo showModal={showModal}
-                                 closeModal={closeModal}
+                    <ContactInfo
                                  contact={oneContactInfo}
                                  onDelete={() => onDeleteContact(oneContactInfo.id)}
                                  loading={deleteLoading}
