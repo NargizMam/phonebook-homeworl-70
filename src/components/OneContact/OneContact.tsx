@@ -8,14 +8,16 @@ import Typography from '@mui/material/Typography';
 interface Props  {
     name: string,
     photo: string,
+    isOpen: React.MouseEventHandler,
 }
-const OneContact: React.FC<Props> = ({name,photo}) => {
+const Contact: React.FC<Props> = ({name,photo,isOpen}) => {
 
     return (
         <Card
             sx={{ display: 'flex', justifyContent: 'space-between', margin: 5,
                 ":hover": {boxShadow: '2px 2px black'},
-            }}>
+            }}
+            onClick={isOpen}>
             <CardMedia
                 component="img"
                 sx={{ width: 151, margin: 1 }}
@@ -34,4 +36,4 @@ const OneContact: React.FC<Props> = ({name,photo}) => {
     );
 };
 
-export default OneContact;
+export default Contact;

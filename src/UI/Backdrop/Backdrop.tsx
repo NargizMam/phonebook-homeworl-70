@@ -2,16 +2,16 @@ import React from 'react';
 
 interface Props {
   show: boolean;
-  onClose?: React.MouseEventHandler;
+  onClick?: React.MouseEventHandler;
 }
 
-const Backdrop: React.FC<Props> = ({show, onClose}) => {
+const Backdrop: React.FC<Props> = ({show, onClick}) => {
   return (
-    <div
-      className="modal-backdrop show"
-      style={{display: show ? 'block' : 'none'}}
-      onClick={onClose}
-    />
+      <div
+          className="modal-backdrop show"
+          style={{display: show ? 'block': 'none'}}
+          onClick={onClick}
+      />
   );
 };
 
